@@ -1,0 +1,121 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 19px;
+  background-color: #fff;
+  max-height: 80px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+
+  &__create-article {
+    color: rgb(82, 196, 26);
+    font-family: Inter;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 22px;
+    letter-spacing: 0px;
+    text-align: left;
+    border: 1px solid rgb(82, 196, 26);
+    border-radius: 5px;
+    padding: 6px 10px;
+    background-color: transparent;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background-color: rgb(82, 196, 26);
+      color: #fff;
+    }
+  }
+
+  &__profile {
+    display: flex;
+    align-items: center;
+    column-gap: 13px;
+    font-size: 18px;
+    line-height: 28px;
+    border: none;
+    background-color: transparent;
+
+    &-image {
+      width: 46px;
+      aspect-ratio: 1/1;
+      object-fit: cover;
+    }
+  }
+
+  &__logout {
+    font-size: 18px;
+    line-height: 28px;
+    padding: 8px 18px 8px 18px;
+    border: 1px solid rgba(0, 0, 0, 0.75);
+    border-radius: 5px;
+    background-color: transparent;
+    color: rgba(0, 0, 0, 0.75);
+    font-family: Inter;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 28px;
+    letter-spacing: 0%;
+    text-align: left;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.75);
+      color: #fff;
+    }
+  }
+
+  &__logged {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fff;
+    width: 100%;
+  }
+
+  &__logged__out {
+    display: flex;
+    align-items: center;
+    column-gap: 27px;
+  }
+
+  &__title {
+    font-size: 18px;
+    line-height: 28px;
+  }
+
+  &__sign {
+    font-family: 'Inter', sans-serif;
+    display: flex;
+    gap: 19px;
+    align-items: center;
+    &-in {
+      font-size: 18px;
+      line-height: 28px;
+      border: none;
+      background-color: transparent;
+    }
+
+    &-up {
+      font-family: 'Inter', sans-serif;
+      box-sizing: border-box;
+      border: 1px solid rgb(82, 196, 26);
+      color: rgb(82, 196, 26);
+      border-radius: 5px;
+      padding: 6px 18px;
+      font-size: 18px;
+      line-height: 28px;
+      background-color: transparent;
+      transition: all 0.3s ease;
+
+      &:hover {
+        background-color: rgb(82, 196, 26);
+        color: #fff;
+      }
+    }
+  }
+}
