@@ -158,7 +158,7 @@ export const postsApi = createApi({
       query: (user) => ({
         url: '/user',
         method: 'PUT',
-        body: user,
+        body: { user }, 
       }),
       invalidatesTags: [{ type: 'User', id: 'LIST' }],
     }),

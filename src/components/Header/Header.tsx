@@ -1,35 +1,38 @@
 import { Spin } from 'antd';
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import userPhoto from '../../assets/user.svg';
 import {
   useAuth,
-  useGetUserByUsernameQuery,
   useGetUserQuery,
+  useGetUserByUsernameQuery,
   useLogoutMutation,
 } from '../../redux/postsApi';
 import classes from './Header.module.scss';
-import { useEffect } from 'react';
 
 const Header: React.FC = () => {
   const { isLoggedIn } = useAuth();
   const [logout] = useLogoutMutation();
-  const { data: user, isLoading, error, refetch } = useGetUserQuery();
-  const { data: userData } = useGetUserByUsernameQuery(user?.user?.username, {
-    skip: !user?.user?.username,
+  const { data: user, isLoading, error } = useGetUserQuery();
+  const { data: profile, refetch } = useGetUserByUsernameQuery(user?.user?.username, {
+    skip: !user?.user?.username, // Запрос делается только если есть username
   });
+
+  useEffect(() => {
+    refetch(); // Обновить данные профиля при изменении username
+  }, [user?.user?.username, refetch]);
+
+  console.log('User:', user);
+  console.log('Profile:', profile);
 
   const handleLogout = async () => {
     try {
       await logout().unwrap();
-      refetch(); // Обновляем пользователя после выхода
+      refetch(); // Очистить данные после выхода
     } catch (err) {
       console.error('Logout failed:', err);
     }
   };
-
-  useEffect(() => {
-    refetch();
-  }, [isLoggedIn, refetch]); // Добавляем isLoggedIn, чтобы обновлялся пользователь
 
   if (isLoading) {
     return (
@@ -56,11 +59,11 @@ const Header: React.FC = () => {
             </Link>
             <Link to="/profile" className={classes['header__profile']}>
               <span className={classes['header__profile-text']}>
-                {userData?.profile?.username || 'Unknown User'}
+                {user?.user?.username || 'Unknown User'}
               </span>
               <img
                 className={classes['header__profile-image']}
-                src={userData?.profile?.image || userPhoto}
+                src={profile?.profile?.image || userPhoto}
                 alt="profile"
               />
             </Link>
