@@ -14,21 +14,21 @@ const Header: React.FC = () => {
   const { isLoggedIn } = useAuth();
   const [logout] = useLogoutMutation();
   const { data: user, isLoading, error } = useGetUserQuery();
-  const { data: profile, refetch } = useGetUserByUsernameQuery(user?.user?.username, {
-    skip: !user?.user?.username, // Запрос делается только если есть username
+  const username = user?.user?.username;
+
+  const { data: profile, refetch } = useGetUserByUsernameQuery(username, {
+    skip: !username, // ✅ Запрос делается только если есть username
   });
 
   useEffect(() => {
-    refetch(); // Обновить данные профиля при изменении username
-  }, [user?.user?.username, refetch]);
-
-  console.log('User:', user);
-  console.log('Profile:', profile);
+    if (username && refetch) {
+      refetch();
+    }
+  }, [username, refetch]); // ✅ Обновлять профиль только при изменении username
 
   const handleLogout = async () => {
     try {
       await logout().unwrap();
-      refetch(); // Очистить данные после выхода
     } catch (err) {
       console.error('Logout failed:', err);
     }
@@ -42,8 +42,8 @@ const Header: React.FC = () => {
     );
   }
 
-  if (error && 'message' in error) {
-    return <div>Error: {String(error.message)}</div>;
+  if (error) {
+    return <div>Error: {error?.data?.message || error?.message || 'Unknown error'}</div>;
   }
 
   return (
@@ -59,7 +59,7 @@ const Header: React.FC = () => {
             </Link>
             <Link to="/profile" className={classes['header__profile']}>
               <span className={classes['header__profile-text']}>
-                {user?.user?.username || 'Unknown User'}
+                {username || 'Unknown User'}
               </span>
               <img
                 className={classes['header__profile-image']}
