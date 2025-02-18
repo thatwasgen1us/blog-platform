@@ -1,11 +1,11 @@
 import { Spin } from 'antd';
 import { useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import userPhoto from '../../assets/user.svg';
 import {
   useAuth,
-  useGetUserQuery,
   useGetUserByUsernameQuery,
+  useGetUserQuery,
   useLogoutMutation,
 } from '../../redux/postsApi';
 import classes from './Header.module.scss';
@@ -15,22 +15,24 @@ const Header: React.FC = () => {
   const [logout] = useLogoutMutation();
   const { data: user, isLoading, error } = useGetUserQuery();
   const username = user?.user?.username;
+  const navigate = useNavigate();
 
   const { data: profile, refetch } = useGetUserByUsernameQuery(username, {
-    skip: !username, // ✅ Запрос делается только если есть username
+    skip: !username, 
   });
 
   useEffect(() => {
-    if (username && refetch) {
-      refetch();
+    if (username) {
+      refetch(); 
     }
-  }, [username, refetch]); // ✅ Обновлять профиль только при изменении username
+  }, [username, refetch]);
 
   const handleLogout = async () => {
     try {
-      await logout().unwrap();
+      await logout().unwrap(); 
+      navigate('/signin'); 
     } catch (err) {
-      console.error('Logout failed:', err);
+      console.error('Logout failed:', err); 
     }
   };
 

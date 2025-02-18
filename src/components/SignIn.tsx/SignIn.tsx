@@ -1,25 +1,31 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useLoginMutation } from '../../redux/postsApi';
-import classes from './SignIn.module.scss';
-import { Spin } from 'antd';
+import { FetchBaseQueryError } from '@reduxjs/toolkit/query'
+import { Spin } from 'antd'
+import React, { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { useLoginMutation } from '../../redux/postsApi'
+import classes from './SignIn.module.scss'
+
+interface ErrorData {
+  message: string;
+}
 
 const SignIn: React.FC = () => {
-  const [loginMutation, { isLoading, isSuccess, isError, error }] = useLoginMutation();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const navigate = useNavigate();
+  const [loginMutation, { isLoading, isSuccess, isError, error }] =
+    useLoginMutation()
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const navigate = useNavigate()
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+    e.preventDefault()
     loginMutation({
       email: e.currentTarget.email.value,
       password: e.currentTarget.password.value,
     })
       .unwrap()
       .then(() => navigate('/posts'))
-      .catch((error) => console.error('Login failed:', error));
-  };
+      .catch((error) => console.error('Login failed:', error))
+  }
 
   return (
     <div className={classes.signIn}>
@@ -56,12 +62,28 @@ const SignIn: React.FC = () => {
           Don't have an account?
           <Link to="/create-user"> Sign Up.</Link>
         </div>
-        {isLoading && <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}><Spin /></div>}
+        {isLoading && (
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <Spin />
+          </div>
+        )}
         {isSuccess && <p>Login Successful!</p>}
-        {isError && <p style={{color: 'red'}}>Error: {error?.data?.message || 'Неправильный email или пароль'}</p>}
+        {isError && (
+          <p style={{ color: 'red' }}>
+            Error:{' '}
+            {(error as FetchBaseQueryError & { data: ErrorData })?.data?.message ||
+              'Неправильный email или пароль'}
+          </p>
+        )}
       </form>
     </div>
-  );
-};
+  )
+}
 
-export default SignIn;
+export default SignIn

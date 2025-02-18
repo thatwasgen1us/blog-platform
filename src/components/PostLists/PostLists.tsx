@@ -2,7 +2,11 @@ import { Pagination, Spin } from 'antd'
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import user from '../../assets/user.svg'
-import { useFavoriteArticleMutation, useGetPostsQuery, useUnfavoriteArticleMutation } from '../../redux/postsApi'
+import {
+  useFavoriteArticleMutation,
+  useGetPostsQuery,
+  useUnfavoriteArticleMutation,
+} from '../../redux/postsApi'
 import { FavoriteIcon } from '../../utils/FavoriteIcon'
 import { formatDate } from '../../utils/formatdate'
 import classes from './PostLists.module.scss'
@@ -14,11 +18,14 @@ const handleImageError = (e) => {
 const PostLists = () => {
   const [currentPage, setCurrentPage] = useState(1)
   const { slug } = useParams()
-  const limit = 5 // Количество постов на странице
-  const offset = (currentPage - 1) * limit // Вычисляем offset
+  const limit = 5 
+  const offset = (currentPage - 1) * limit 
   const [favoriteArticle] = useFavoriteArticleMutation()
   const [unfavoriteArticle] = useUnfavoriteArticleMutation()
-  const { data, isLoading, error, refetch } = useGetPostsQuery({ offset, limit })
+  const { data, isLoading, error, refetch } = useGetPostsQuery({
+    offset,
+    limit,
+  })
 
   const onPageChange = (page: number) => {
     setCurrentPage(page)
@@ -26,19 +33,19 @@ const PostLists = () => {
 
   const handleFavorite = async (slug: string) => {
     try {
-      await favoriteArticle(slug).unwrap() // Ждем, пока запрос выполнится
+      await favoriteArticle(slug).unwrap() 
       refetch()
     } catch (error) {
-      console.error("Ошибка при добавлении в избранное:", error)
+      console.error('Ошибка при добавлении в избранное:', error)
     }
   }
-  
+
   const handleUnfavorite = async (slug: string) => {
     try {
-      await unfavoriteArticle(slug).unwrap() // Ждем, пока запрос выполнится
+      await unfavoriteArticle(slug).unwrap() 
       refetch()
     } catch (error) {
-      console.error("Ошибка при удалении из избранного:", error)
+      console.error('Ошибка при удалении из избранного:', error)
     }
   }
 
@@ -83,7 +90,11 @@ const PostLists = () => {
                   </Link>
                   <button
                     className={classes.postLists__item__header__title__button}
-                    onClick={data.favorited ? () => handleUnfavorite(data.slug) : () => handleFavorite(data.slug)}
+                    onClick={
+                      data.favorited
+                        ? () => handleUnfavorite(data.slug)
+                        : () => handleFavorite(data.slug)
+                    }
                   >
                     <FavoriteIcon favorited={data.favorited} />
                   </button>
@@ -139,11 +150,11 @@ const PostLists = () => {
       </ul>
       <Pagination
         align="center"
-        current={currentPage} // Устанавливаем текущую страницу
-        pageSize={limit} // Количество постов на странице
+        current={currentPage} 
+        pageSize={limit} 
         total={data?.articlesCount || 0}
         onChange={onPageChange}
-        showSizeChanger={false} // Обработчик изменения страницы
+        showSizeChanger={false} 
         className={classes.postLists__pagination}
         itemRender={(page, type, originalElement) => {
           if (type === 'page') {

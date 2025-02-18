@@ -3,12 +3,14 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { useSelector } from 'react-redux'
 import {
   Article,
-  ArticleData,
   GetPostsArgs,
-  Post,
   PostsResponse,
   User,
 } from '../interface/interface'
+
+interface ApiResponse {
+  article: Article
+}
 
 const authSlice = createSlice({
   name: 'auth',
@@ -81,7 +83,7 @@ export const postsApi = createApi({
         try {
           const { data } = await queryFulfilled
           localStorage.setItem('token', data.user.token)
-          dispatch(setLoggedIn(true)) // Обновляем состояние аутентификации
+          dispatch(setLoggedIn(true))
         } catch (error) {
           console.error('Registration failed:', error)
         }
@@ -109,7 +111,17 @@ export const postsApi = createApi({
     getUser: builder.query<User, void>({
       query: () => '/user',
     }),
-    addArticle: builder.mutation<{ article: Post }, Omit<ArticleData, 'slug'>>({
+    addArticle: builder.mutation<
+      { article: Article },
+      {
+        article: {
+          title: string
+          description: string
+          body: string
+          tagList?: string[]
+        }
+      }
+    >({
       query: (articleData) => ({
         url: '/articles',
         method: 'POST',
@@ -117,7 +129,7 @@ export const postsApi = createApi({
       }),
       invalidatesTags: [{ type: 'Posts', id: 'LIST' }],
     }),
-    getArticle: builder.query<Article, string>({
+    getArticle: builder.query<ApiResponse, string>({
       query: (slug) => `/articles/${slug}`,
     }),
     getUserByUsername: builder.query<User, string>({
@@ -131,13 +143,21 @@ export const postsApi = createApi({
       invalidatesTags: [{ type: 'Posts', id: 'LIST' }],
     }),
     updateArticle: builder.mutation<
-      void,
-      { slug: string; article: Omit<ArticleData, 'slug'> }
+      { article: Article },
+      {
+        slug: string
+        article: {
+          title: string
+          description: string
+          body: string
+          tagList?: string[]
+        }
+      }
     >({
       query: ({ slug, article }) => ({
         url: `/articles/${slug}`,
         method: 'PUT',
-        body: article,
+        body: { article },
       }),
       invalidatesTags: [{ type: 'Posts', id: 'LIST' }],
     }),
@@ -153,12 +173,13 @@ export const postsApi = createApi({
         url: `/articles/${slug}/favorite`,
         method: 'DELETE',
       }),
+      invalidatesTags: [{ type: 'Posts', id: 'LIST' }],
     }),
     updateUser: builder.mutation<void, User>({
       query: (user) => ({
         url: '/user',
         method: 'PUT',
-        body: { user }, 
+        body: { user },
       }),
       invalidatesTags: [{ type: 'User', id: 'LIST' }],
     }),
@@ -184,6 +205,6 @@ export const {
 export const useAuth = () => {
   const isLoggedIn = useSelector(
     (state: { auth: { isLoggedIn: boolean } }) => state.auth.isLoggedIn
-  ) // Получаем состояние из Redux
+  )
   return { isLoggedIn }
 }

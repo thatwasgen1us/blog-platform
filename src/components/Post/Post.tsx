@@ -32,19 +32,18 @@ const Post = () => {
       await favoriteArticle(slug).unwrap() // Ждем, пока запрос выполнится
       refetch()
     } catch (error) {
-      console.error("Ошибка при добавлении в избранное:", error)
+      console.error('Ошибка при добавлении в избранное:', error)
     }
   }
-  
+
   const handleUnfavorite = async (slug: string) => {
     try {
       await unfavoriteArticle(slug).unwrap() // Ждем, пока запрос выполнится
       refetch()
     } catch (error) {
-      console.error("Ошибка при удалении из избранного:", error)
+      console.error('Ошибка при удалении из избранного:', error)
     }
   }
-
 
   useEffect(() => {
     refetch()
@@ -93,11 +92,15 @@ const Post = () => {
                   {data?.article?.title}
                 </h3>
                 <button
-                    className={classes.postLists__item__header__title__button}
-                    onClick={data?.article?.favorited ? () => handleUnfavorite(data?.article?.slug) : () => handleFavorite(data?.article?.slug)}
-                  >
-                    <FavoriteIcon favorited={data?.article?.favorited} />
-                  </button>
+                  className={classes.postLists__item__header__title__button}
+                  onClick={
+                    data?.article?.favorited
+                      ? () => handleUnfavorite(data?.article?.slug)
+                      : () => handleFavorite(data?.article?.slug)
+                  }
+                >
+                  <FavoriteIcon favorited={data?.article?.favorited} />
+                </button>
                 <span className={classes.postLists__item__header__title__span}>
                   {data?.article?.favoritesCount || 0}
                 </span>

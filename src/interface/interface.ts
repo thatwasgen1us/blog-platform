@@ -24,12 +24,11 @@ export interface User {
   image: string | null
 }
 
-
 export interface UserProfile {
-  username: string;
-  email: string;
-  bio?: string;
-  image?: string | null;
+  username: string
+  email: string
+  bio?: string
+  image?: string | null
 }
 
 export interface FormData {
@@ -52,20 +51,17 @@ export interface GetPostsArgs {
   limit?: number
 }
 
+export interface ArticleData {
+  slug: string;
+  title: string;
+  description: string;
+  body: string;
+  tagList: string[];
+}
 export interface Article {
-  slug: string
-  title: string
-  description: string
-  body: string
-  tags: string[]
-  createdAt: string
-  updatedAt: string
-  favorited: boolean
-  favoritesCount: number
-  author: {
-    username: string
-    bio: string
-    image: string
-    following: boolean
-  }
+  title: string;
+  description: string;
+  body: string;
+  tagList: string[];
+  slug?: string;
 }
