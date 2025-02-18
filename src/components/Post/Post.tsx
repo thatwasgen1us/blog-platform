@@ -163,7 +163,7 @@ const Post = () => {
           </div>
         </div>
         <div className={classes.post__title}>
-          <p>{data?.article?.body}</p>
+        {data?.article?.body}
         </div>
       </div>
     </>

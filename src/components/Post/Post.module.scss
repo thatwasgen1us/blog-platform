@@ -23,6 +23,9 @@
     flex-direction: column;
     row-gap: 20px;
     color: var(--text-color-dark);
+    text-wrap: balance;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 
     &__text {
       font-size: 18px;

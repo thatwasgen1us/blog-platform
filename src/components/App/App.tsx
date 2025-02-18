@@ -7,7 +7,7 @@ import {
 import Header from '../Header/Header'
 import CreateUser from '../Login/CreateUser'
 import PostLists from '../PostLists/PostLists'
-import SignIn from '../SignIn.tsx/SignIn'
+import SignIn from '../SignIn/SignIn'
 import classes from './App.module.scss'
 import Post from '../Post/Post'
 import EditProfile from '../EditProfile/EditProfile'

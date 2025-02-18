@@ -1,4 +1,3 @@
-import { Spin } from 'antd';
 import { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import userPhoto from '../../assets/user.svg';
@@ -18,35 +17,23 @@ const Header: React.FC = () => {
   const navigate = useNavigate();
 
   const { data: profile, refetch } = useGetUserByUsernameQuery(username, {
-    skip: !username, 
+    skip: !username,
   });
 
   useEffect(() => {
     if (username) {
-      refetch(); 
+      refetch();
     }
   }, [username, refetch]);
 
   const handleLogout = async () => {
     try {
-      await logout().unwrap(); 
-      navigate('/signin'); 
+      await logout().unwrap();
+      navigate('/signin');
     } catch (err) {
-      console.error('Logout failed:', err); 
+      console.error('Logout failed:', err);
     }
   };
-
-  if (isLoading) {
-    return (
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-        <Spin />
-      </div>
-    );
-  }
-
-  if (error) {
-    return <div>Error: {error?.data?.message || error?.message || 'Unknown error'}</div>;
-  }
 
   return (
     <header className={classes.header}>
